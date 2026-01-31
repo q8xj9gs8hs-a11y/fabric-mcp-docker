@@ -15,9 +15,9 @@ In this repo, I will guide you through the installation process, configuration, 
 
 ## Previews
 
-![src/images/showcase-2.png]  
+![src/images/orchestration.png]  
 
-![src/images/showcase-1.png]
+![src/images/usage.png]
 
 # Installation
 
@@ -57,27 +57,3 @@ If you use Homebrew:
 ### All examples will be using:
 - [LM Studio](https://lmstudio.ai) as the MCP client
 - [Cerebras AI](https://www.cerebras.ai) as Fabric's vendor
-
-Special thanks to:
-- @danielmiessler, @ksylvan, creators of `fabric-ai` and `fabric-mcp`!
-- @jimscard for teaching me everything I know about this and witnessing my learning process!
-
-## Repository links:
-
-- [`fabric-ai`](https://github.com/danielmiessler/Fabric.git) @danielmiessler ultimate repository
-	- Also [here](https://github.com/ksylvan/fabric.git)
-- [`fabric-mcp`](https://github.com/ksylvan/fabric-mcp.git) @ksylvan fabric-mcp
-- [`fabric-mcp`](https://github.com/jimscard/fabric-mcp.git) @jimscard fork for use in Docker
-	- See also: ["Start / stop / use a containerized instance of fabric"](https://github.com/jimscard/fabric-d.git)
-
-## Docker images
-
-- [`kayvan/fabric`](https://hub.docker.com/r/kayvan/fabric)
-	- or `docker pull kayvan/fabric:latest`
-- [`jimscard/fabric-yt`](https://hub.docker.com/r/jimscard/fabric-yt)
-	- or `docker pull jimscard/fabric-yt:latest`
-
-# Extra helpful resources
-
-- [Git cloning CLI tool for automated organization of repositories](https://github.com/grdl/git-get)
-- [Cool docker containers monitoring CLI tool](https://github.com/jesseduffield/lazydocker.git)
