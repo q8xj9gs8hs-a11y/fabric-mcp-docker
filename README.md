@@ -17,7 +17,7 @@ In this repo, I will guide you through the installation process, configuration, 
 
 ![containers running](src/images/orchestration.png)  
 
-![exmaple command]src/images/usage.png)
+![example command](src/images/usage.png)
 
 # Installation
 
