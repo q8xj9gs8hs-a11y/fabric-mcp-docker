@@ -15,9 +15,9 @@ In this repo, I will guide you through the installation process, configuration, 
 
 ## Previews
 
-![src/images/orchestration.png]  
+![containers running](src/images/orchestration.png)  
 
-![src/images/usage.png]
+![exmaple command]src/images/usage.png)
 
 # Installation
 
