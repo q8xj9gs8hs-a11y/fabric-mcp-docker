@@ -26,7 +26,9 @@ In this repo, I will guide you through the installation process, configuration, 
 - `docker` and `docker-compose`
 If you use Homebrew:
 
-```brew install docker docker-compose```
+```
+brew install docker docker-compose
+```
 
 1. Clone this repository:
 
