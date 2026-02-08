@@ -30,15 +30,21 @@ If you use Homebrew:
 
 1. Clone this repository:
 
-```git clone https://github.com/q8xj9gs8hs-a11y/docker-compose-fabric-ai.git && cd q8xj9gs8hs-a11y/docker-compose-fabric-ai```
+```
+git clone https://github.com/q8xj9gs8hs-a11y/docker-compose-fabric-ai.git && cd q8xj9gs8hs-a11y/docker-compose-fabric-ai
+```
 
 2. Create fabric configuration setup
 
-```docker run -it --rm kayvan/fabric -S```
+```
+docker run -it --rm kayvan/fabric -S
+```
 
 4. Docker compose up
 
-```docker compose --project-directory q8xj9gs8hs-a11y/fabric-docker up -d```
+```
+docker compose --project-directory q8xj9gs8hs-a11y/fabric-docker up -d
+```
 
 5. Add to your MCP client
 
