@@ -14,11 +14,21 @@ Docker Compose setup for Fabric AI with MCP server integration
 git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp-docker.git
 cd fabric-mcp-docker
 ```
-2. Let `docker compose` build everything for you
+2. Pull the official fabric image
+```
+docker pull kayvan/fabric
+```
+3. Create the folder to store the configuration files, then go through fabric's setup
+```
+mkdir -p ~/.fabric-config
+
+docker run --rm -it -v "${HOME}/.fabric-config:/root/.config/fabric" kayvan/fabric --setup
+```
+4. Start the project with `docker compose` (automatically builds the MCP server for you)
 ```
 docker compose --project-name fabric-ai up -d
 ```
-3. Configure your `mcp.json`
+5. Configure your `mcp.json`
 ```json
 {
   "mcpServers": {
@@ -28,19 +38,23 @@ docker compose --project-name fabric-ai up -d
   }
 }
 ```
-4. To stop the containers
+To stop the containers:
 ```
 docker compose --project-name fabric-ai down
 ```
-## Manual Build
-1. Clone the `fabric-mcp` repository
+For consecutive startups, you can skip building `fabric-mcp`:
 ```
-git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp.git
-cd fabric-mcp
+docker compose --project-name fabric-ai up -d --no-build
+```
+## Manual Build
+1. Clone this repository
+```
+git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp-docker.git
+cd fabric-mcp-docker
 ```
 2. Build the Dockerfile
 ```
-docker build -t fabric-mcp -f docker/Dockerfile .
+docker build -t fabric-mcp .
 ```
 3. Pull the official fabric image
 ```
@@ -78,17 +92,11 @@ Notice that one difference from the Quickest method is that we explicitly use th
 fabric-mcp:
   image: fabric-mcp
 ```
-Building manually also allows you to hardcode the transport method, host, and/or port in the Dockerfile before building:
+Building manually allows you to hardcode the transport method, host, and/or port in the Dockerfile before building:
 ```dockerfile
 ...
 
 ENTRYPOINT ["fabric-mcp", "--transport", "http", "--host", "0.0.0.0", "--port 8000"]
-```
-and
-```dockerfile
-...
-
-ENTRYPOINT ["fabric", "--serve", "--address", "0.0.0.0:8080"]
 ```
 6. Run `docker compose`
 ```
