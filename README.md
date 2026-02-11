@@ -1,67 +1,126 @@
-# docker-compose-fabric-ai
-Use `fabric-ai`'s `REST API` and `MCP server` inside `Docker` containers and manage with `docker compose`
+Docker Compose setup for Fabric AI with MCP server integration
 
-# Purpose
+# Setup
 
-Fabric is already an amazing tool for maximizing and optimizing the use of AI through the Fabric CLI. This is taken even further when given as tools for an LLM itself. The goal is to utilize these tools safely in containers, via [Docker CLI](https://www.docker.com/products/cli/).
-
-It can become quite a hassle to have to manage your fabric server REST API instance along with configuring the MCP server. While it technically is easier to set it and forget, there are some noticeable improvements:
-
-1. We run a fabric server inside a docker container, not on your local machine for better security. This is where the main event occurs.
-2. We run the fabric MCP server inside a docker container, not on your local machine; this significantly improves security, and is generally still the best practice with MCP servers.
-3. Managing the REST API and MCP server with `docker compose` makes building, starting, and stopping them a breeze; everything is connected within a docker network as well (or even a Tailscale network if you wanted to; see [Tailscale with Docker](https://tailscale.com/kb/1282/docker)).
-
-In this repo, I will guide you through the installation process, configuration, usage, and degrees of freedom.
-
-## Previews
-
-![containers running](src/images/orchestration.png)  
-
-![example command](src/images/usage.png)
-
-# Installation
-
-## Installation (for Mac users)
-### Requirements
-- `docker` and `docker-compose`
-If you use Homebrew:
-
+## Quickest
+1. Clone this repository
 ```
-brew install docker docker-compose
+git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp-docker.git
+cd fabric-mcp-docker
 ```
-
-1. Clone this repository:
-
+2. Let `docker compose` build everything for you
 ```
-git clone https://github.com/q8xj9gs8hs-a11y/docker-compose-fabric-ai.git && cd q8xj9gs8hs-a11y/docker-compose-fabric-ai
+docker compose --project-name fabric-ai up -d
 ```
-
-2. Create fabric configuration setup
-
-```
-docker run -it --rm kayvan/fabric -S
-```
-
-4. Docker compose up
-
-```
-docker compose --project-directory q8xj9gs8hs-a11y/fabric-docker up -d
-```
-
-5. Add to your MCP client
-
+3. Configure your `mcp.json`
 ```json
 {
   "mcpServers": {
-    "fabric-mcp": {
-      "url": "http://localhost:8000/message"
+    "fabric": {
+          "url": "http://localhost:8000/message"
     }
   }
 }
 ```
+4. To stop the containers
+```
+docker compose --project-name fabric-ai down
+```
+## Manual Build
+1. Clone the fabric-mcp repository
+```
+git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp.git
+cd fabric-mcp
+```
+2. Build the Dockerfile
+```
+docker build -t fabric-mcp -f docker/Dockerfile .
+```
+3. Pull the official fabric image
+```
+docker pull kayvan/fabric
+```
+4. Create the folder to store the configuration files, then go through fabric's setup
+```
+mkdir -p ~/.fabric-config
 
-# Usage
+docker run --rm -it -v "${HOME}/.fabric-config:/root/.config/fabric" kayvan/fabric --setup
+```
+5. Create the docker-compose.yml
+```yml
+services:
+  fabric-server:
+    image: kayvan/fabric
+    container_name: fabric-server
+    volumes:
+      - "${HOME}/.fabric-config:/root/.config/fabric"
+    command: --serve --address 0.0.0.0:8080
 
-### All examples will be using:
-- [LM Studio](https://lmstudio.ai) as the MCP client
-- [Cerebras AI](https://www.cerebras.ai) as Fabric's vendor
+  fabric-mcp:
+    image: fabric-mcp
+    container_name: fabric-mcp
+    environment:
+      - FABRIC_BASE_URL=http://fabric-server:8080
+    ports:
+      - "8000:8000"
+    command: --transport http --host 0.0.0.0 --port 8000
+    depends_on:
+      - fabric-server
+```
+Notice that one difference from the Quickest method is that we explicitly use the `fabric-mcp` image that we built earlier during step 2:
+```yml
+fabric-mcp:
+  image: fabric-mcp
+```
+Building manually also allows you to hardcode the transport method, host, and/or port in the Dockerfile before building:
+```dockerfile
+...
+
+ENTRYPOINT ["fabric-mcp", "--transport", "http", "--host", "0.0.0.0", "--port 8000"]
+```
+and
+```dockerfile
+...
+
+ENTRYPOINT ["fabric", "--serve", "--address", "0.0.0.0:8080"]
+```
+6. Run `docker compose`
+```
+docker compose --project-name fabric-ai up -d
+```
+7. Configure your `mcp.json`
+```json
+{
+  "mcpServers": {
+    "fabric": {
+          "url": "http://localhost:8000/message"
+    }
+  }
+}
+```
+# Notes
+
+The `docker-compose.yml` is the equivalent of running these two containers:
+```
+docker run --rm -d --name fabric-server -v "${HOME}/.fabric-config:/root/.config/fabric" kayvan/fabric --serve --address 0.0.0.0:8080
+
+docker run --rm -d --name fabric-mcp -e FABRIC_BASE_URL=http://fabric-server:8080 -p 8000:8000 fabric-mcp --transport http --host 0.0.0.0 --port 8000
+```
+Their corresponding entrypoints are:
+```
+docker image inspect kayvan/fabric | grep -A 2 '"Entrypoint"'
+
+docker image inspect fabric-mcp | grep -A 2 '"Entrypoint"'
+```
+```json
+"Entrypoint": [
+  "fabric"
+],
+
+"Entrypoint": [
+  "fabric-mcp"
+],
+```
+The advantages of using `docker compose` instead:
+* Automatic creation of an isolated container network called `fabric-ai_default`, or more generally, `<project name>_default`
+* Ease of creation and destruction of both containers simultaneously
