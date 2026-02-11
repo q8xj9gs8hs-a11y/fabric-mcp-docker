@@ -8,8 +8,8 @@ services:
 
   fabric-mcp:
     build:
-      context: ./fabric-mcp
-      dockerfile: docker/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: fabric-mcp
     environment:
       - FABRIC_BASE_URL=http://fabric-server:8080
