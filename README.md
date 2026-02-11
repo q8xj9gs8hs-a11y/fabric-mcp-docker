@@ -1,5 +1,11 @@
 Docker Compose setup for Fabric AI with MCP server integration
 
+### What is Fabric?
+
+* **Fabric’s Purpose:** To address the integration problem of AI by organizing and managing AI prompts for real-world tasks.
+* **Fabric’s Functionality:** Allows users to create, collect, and organize AI solutions (prompts) for use in various tools or directly through Fabric’s command-line interface.
+* **Fabric’s Approach:** Breaks down problems into smaller components and applies AI to each component, offering a wide range of pre-built prompts (Patterns) for various life and work activities.
+
 # Setup
 
 ## Quickest
@@ -27,7 +33,7 @@ docker compose --project-name fabric-ai up -d
 docker compose --project-name fabric-ai down
 ```
 ## Manual Build
-1. Clone the fabric-mcp repository
+1. Clone the `fabric-mcp` repository
 ```
 git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp.git
 cd fabric-mcp
