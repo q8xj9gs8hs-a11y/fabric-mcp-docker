@@ -33,7 +33,7 @@ docker compose --project-name fabric-ai up -d
 {
   "mcpServers": {
     "fabric": {
-          "url": "http://localhost:8000/message"
+      "url": "http://localhost:8000/message"
     }
   }
 }
