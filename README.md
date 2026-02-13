@@ -197,3 +197,8 @@ Your `mcp.json` will be set up as:
   }
 }
 ```
+Adjust the command accordingly if you built manually and changed the `ENTRYPOINT` for fabric-mcp.
+
+## LICENSE
+
+This project is licensed under the MIT license.
