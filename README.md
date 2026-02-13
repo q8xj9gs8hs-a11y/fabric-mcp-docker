@@ -47,6 +47,19 @@ For consecutive startups, you can skip building `fabric-mcp`:
 docker compose --project-name fabric-ai up -d --no-build
 ```
 ## Manual Build
+
+Building manually allows you to hardcode the transport method, host, and/or port in the Dockerfile without a `CMD` before building:
+```dockerfile
+...
+
+ENTRYPOINT ["fabric-mcp", "--transport", "http", "--host", "0.0.0.0", "--port 8000"]
+```
+Or simply just change the default command:
+```dockerfile
+...
+
+CMD ["--transport", "http", "--host", "<host>", "--port", "<port>"]
+```
 1. Clone this repository
 ```
 git clone https://github.com/q8xj9gs8hs-a11y/fabric-mcp-docker.git
@@ -85,20 +98,8 @@ services:
       - "8000:8000"
     volumes:
       - "${HOME}/.fabric-config:/root/.config/fabric"
-    command: --transport http --host 0.0.0.0 --port 8000
     depends_on:
       - fabric-server
-```
-Notice that one difference from the Quickest method is that we explicitly use the `fabric-mcp` image that we built earlier during step 2:
-```yml
-fabric-mcp:
-  image: fabric-mcp
-```
-Building manually allows you to hardcode the transport method, host, and/or port in the Dockerfile before building:
-```dockerfile
-...
-
-ENTRYPOINT ["fabric-mcp", "--transport", "http", "--host", "0.0.0.0", "--port 8000"]
 ```
 6. Run `docker compose`
 ```
@@ -109,10 +110,15 @@ docker compose --project-name fabric-ai up -d
 {
   "mcpServers": {
     "fabric": {
-          "url": "http://localhost:8000/message"
+      "url": "http://localhost:8000/message"
     }
   }
 }
+```
+Notice that one difference from the Quickest method is that we explicitly use the `fabric-mcp` image that we built earlier during step 2:
+```yml
+fabric-mcp:
+  image: fabric-mcp
 ```
 # Notes
 
@@ -138,5 +144,56 @@ docker image inspect fabric-mcp | grep -A 2 '"Entrypoint"'
 ],
 ```
 The advantages of using `docker compose` instead:
-* Automatic creation of an isolated container network called `fabric-ai_default`, or more generally, `<project name>_default`
-* Ease of creation and destruction of both containers simultaneously
+* Automatic creation of an isolated container network called `fabric-ai_default`, or more generally, `<project name>_default`.
+* Ease of creation and destruction of both containers simultaneously.
+* Docker's mature networking automatically manages hostname resolution.
+
+# Using fabric-mcp via `stdio`
+
+If you'd rather use fabric-mcp with `--transport stdio`, you can change the `docker-compose.yml` and `mcp.json` like so:
+
+First, create a container network:
+```
+docker network create fabric-network
+```
+Then, `docker-compose.yml` will be adjusted to just maintain `fabric-server` connected to `fabric-network`:
+```yml
+services:
+  fabric-server:
+    image: kayvan/fabric
+    container_name: fabric-server
+    volumes:
+      - "${HOME}/.fabric-config:/root/.config/fabric"
+    command: --serve --address 0.0.0.0:8080
+    networks:
+      - fabric-network
+networks:
+  fabric-network:
+    driver: bridge
+```
+Your `mcp.json` will be set up as:
+```json
+{
+  "mcpServers": {
+    "fabric": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--network",
+        "fabric-network",
+        "-v",
+        "${HOME}/.fabric-config:/root/.config/fabric",
+        "-e",
+        "FABRIC_BASE_URL",
+        "fabric-mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "FABRIC_BASE_URL": "http://fabric-server:8080"
+    }
+  }
+}
+```
