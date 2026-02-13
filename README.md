@@ -126,7 +126,7 @@ The `docker-compose.yml` is the equivalent of running these two containers:
 ```
 docker run --rm -d --name fabric-server -v "${HOME}/.fabric-config:/root/.config/fabric" kayvan/fabric --serve --address 0.0.0.0:8080
 
-docker run --rm -d --name fabric-mcp -e FABRIC_BASE_URL=http://fabric-server:8080 -p 8000:8000 fabric-mcp --transport http --host 0.0.0.0 --port 8000
+docker run --rm -d --name fabric-mcp -v "${HOME}/.fabric-config:/root/.config/fabric" -e FABRIC_BASE_URL=http://fabric-server:8080 -p 8000:8000 fabric-mcp --transport http --host 0.0.0.0 --port 8000
 ```
 Their corresponding entrypoints are:
 ```

@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "fabric": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--network",
+        "fabric-network",
+        "-v",
+        "${HOME}/.fabric-config:/root/.config/fabric",
+        "-e",
+        "FABRIC_BASE_URL",
+        "fabric-mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "FABRIC_BASE_URL": "http://fabric-server:8080"
+    }
+  }
+}

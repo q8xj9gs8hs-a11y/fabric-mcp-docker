@@ -1,0 +1,12 @@
+services:
+  fabric-server:
+    image: kayvan/fabric
+    container_name: fabric-server
+    volumes:
+      - "${HOME}/.fabric-config:/root/.config/fabric"
+    command: --serve --address 0.0.0.0:8080
+    networks:
+      - fabric-network
+networks:
+  fabric-network:
+    driver: bridge
