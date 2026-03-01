@@ -82,7 +82,7 @@ docker run --rm -d \
         --name fabric-mcp \
         -p 8000:8000 \
         -v "${HOME}/.fabric-config:/home/appuser/.config/fabric" \
-        -e FABRIC_BASE_URL=http://fabric:8080
+        -e FABRIC_BASE_URL=http://fabric:8080 \
         minatogh/fabric-mcp --transport http --host 0.0.0.0 --port 8000
 ```
 
