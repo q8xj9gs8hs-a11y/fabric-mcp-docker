@@ -15,7 +15,7 @@ Configure your `mcp.json`:
 {
   "mcpServers": {
     "fabric": {
-      "url": http://localhost:8000/message
+      "url": "http://localhost:8000/message"
   }
 }
 ```
@@ -112,7 +112,7 @@ docker run --rm -d \
 {
   "mcpServers": {
     "fabric": {
-      "url": http://localhost:8000/message
+      "url": "http://localhost:8000/message"
   }
 }
 ```
