@@ -30,7 +30,7 @@ Run the container using a pre-built image:
 
 ```sh
 # Listens at the container's port 8080 on all network interfaces in the background
-docker run --rm -d
+docker run --rm -d \
         --network fabric-network \
         --name fabric \
         -v "${HOME}/.fabric-config:/home/appuser/.config/fabric" \
@@ -77,7 +77,7 @@ The MCP server will access the host `fabric`, via connection on the same network
 Runs via `stdio` by default, change its `docker run` command and alter your `mcp.json` accordingly:
 
 ```sh
-docker run --rm -d
+docker run --rm -d \
         --network fabric-network \
         --name fabric-mcp \
         -p 8000:8000 \
