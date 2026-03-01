@@ -5,8 +5,14 @@
 git clone https://github.com/minato-gh/fabric-mcp-docker.git
 cd fabric-mcp-docker
 
+# Make the directory that will be bind-mounted onto the fabric container
+mkdir -p "${HOME}/.fabric-config"
+
 # Start both services
 docker compose up -d
+
+# Install the patterns and strategies, and choose a vendor and default model
+docker exec fabric fabric --setup
 ```
 
 Configure your `mcp.json`:
@@ -41,10 +47,10 @@ docker build -t minatogh/fabric -f scripts/docker/Dockerfile https://github.com/
 Prepare the container:
 
 ```sh
-# This is the directory that will be bind mounted onto the fabric container
+# Make the directory that will be bind-mounted onto the fabric container
 mkdir -p "${HOME}/.fabric-config"
 
-# Proceed with installing the patterns and strategies, and choosing a vendor and default model
+# Install the patterns and strategies, and choose a vendor and default model
 docker run -it --rm -v "${HOME}/.fabric-config:/home/appuser/.config/fabric" minatogh/fabric --setup
 ```
 
