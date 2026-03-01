@@ -8,11 +8,11 @@ cd fabric-mcp-docker
 # Make the directory that will be bind-mounted onto the fabric container
 mkdir -p "${HOME}/.fabric-config"
 
+# Install the patterns and strategies, and choose a vendor and default model
+docker run -it --rm -v "${HOME}/.fabric-config:/home/appuser/.config/fabric" minatogh/fabric --setup
+
 # Start both services
 docker compose up -d
-
-# Install the patterns and strategies, and choose a vendor and default model
-docker exec fabric fabric --setup
 ```
 
 Configure your `mcp.json`:
