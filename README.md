@@ -95,4 +95,8 @@ docker run --rm -d
 }
 ```
 
-This exposes `fabric-mcp`'s port `8000`, which runs as a server in the background listening to all network interfaces, to the host machine's port `8000`. This is where your MCP client will reach it at. 
+This exposes `fabric-mcp`'s port `8000`, which runs as a server in the background listening to all network interfaces, to the host machine's port `8000`. This is where your MCP client will reach it at, rather than running the container itself.
+
+# LICENSE
+
+MIT
