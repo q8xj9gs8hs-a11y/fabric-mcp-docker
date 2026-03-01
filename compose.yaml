@@ -1,0 +1,18 @@
+name: fabric-mcp-docker
+services:
+    fabric:
+        container_name: fabric
+        volumes:
+            - ${HOME}/.fabric-config:/home/appuser/.config/fabric
+        image: minatogh/fabric:latest
+        command: --serve --address 0.0.0.0:8080
+    fabric-mcp:
+        container_name: fabric-mcp
+        ports:
+            - 8000:8000
+        volumes:
+            - ${HOME}/.fabric-config:/home/appuser/.config/fabric
+        environment:
+            - FABRIC_BASE_URL=http://fabric:8080
+        image: minatogh/fabric-mcp:latest
+        command: --transport http --host 0.0.0.0 --port 8000
