@@ -1,3 +1,14 @@
+# Easy Setup
+
+```sh
+# Clone this repository
+git clone https://github.com/minato-gh/fabric-mcp-docker.git
+cd fabric-mcp-docker
+
+# Start both services
+docker compose up -d
+```
+
 # Installation
 
 Create a network for container isolation:
