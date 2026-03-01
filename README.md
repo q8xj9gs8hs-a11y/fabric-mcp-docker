@@ -1,4 +1,4 @@
-# Easy Setup
+# Easy Installation 
 
 ```sh
 # Clone this repository
@@ -9,7 +9,18 @@ cd fabric-mcp-docker
 docker compose up -d
 ```
 
-# Installation
+Configure your `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "fabric": {
+      "url": http://localhost:8000/message
+  }
+}
+```
+
+# Manual Installation 
 
 Create a network for container isolation:
 
@@ -30,14 +41,14 @@ docker build -t minatogh/fabric -f scripts/docker/Dockerfile https://github.com/
 Prepare the container:
 
 ```sh
-# This is the directory that will be bind mounted into the fabric container
+# This is the directory that will be bind mounted onto the fabric container
 mkdir -p "${HOME}/.fabric-config"
 
 # Proceed with installing the patterns and strategies, and choosing a vendor and default model
 docker run -it --rm -v "${HOME}/.fabric-config:/home/appuser/.config/fabric" minatogh/fabric --setup
 ```
 
-Run the container using a pre-built image:
+Run the container:
 
 ```sh
 # Listens at the container's port 8080 on all network interfaces in the background
@@ -85,7 +96,7 @@ The MCP server will access the host `fabric`, via connection on the same network
 
 ## Run `fabric-mcp` as `http`
 
-Runs via `stdio` by default, change its `docker run` command and alter your `mcp.json` accordingly:
+Runs via `stdio` by default, run the container yourself and alter your `mcp.json` accordingly:
 
 ```sh
 docker run --rm -d \
