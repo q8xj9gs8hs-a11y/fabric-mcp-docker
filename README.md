@@ -128,3 +128,7 @@ This exposes `fabric-mcp`'s port `8000`, which runs as a server in the backgroun
 # LICENSE
 
 MIT
+
+---
+
+Disclaimer: I am not the creator or developer of [Fabric](https://github.com/danielmiessler/Fabric.git) or [Fabric-MCP](https://github.com/ksylvan/fabric-mcp.git). Follow the links to learn more about them.
