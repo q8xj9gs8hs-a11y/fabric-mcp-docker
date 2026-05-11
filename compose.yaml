@@ -14,5 +14,5 @@ services:
             - ${HOME}/.fabric-config:/home/appuser/.config/fabric
         environment:
             - FABRIC_BASE_URL=http://fabric:8080
-        image: minatogh/fabric-mcp:latest
+        image: honeylavendar7435/fabric-mcp:v1
         command: --transport http --host 0.0.0.0 --port 8000
