@@ -9,7 +9,7 @@ services:
     fabric-mcp:
         container_name: fabric-mcp
         ports:
-            - 8000:8000
+            - 127.0.0.1:8000:8000
         volumes:
             - ${HOME}/.fabric-config:/home/appuser/.config/fabric
         environment:
