@@ -2,23 +2,29 @@ name: fabric-mcp-docker
 services:
     fabric:
         container_name: fabric
+        restart: on-failure:3
+        cpus: '0.1'
+        mem_limit: 128m
+        read_only: true
         volumes:
             - ${HOME}/.fabric-config:/home/appuser/.config/fabric
-        image: kayvan/fabric:latest
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.1'
-                    memory: 128M
-                reservations:
-                    cpus: '0.05'
-                    memory: 64M
-            restart_policy:
-                condition: on-failure
-                max_attempts: 3
+        image: kayvan/fabric@sha256:ec84f10869299b927543650273976c5f4f7154fc8a06958348c333bd437f2cae
         command: --serve --address 0.0.0.0:8080
+        healthcheck:
+            test: fabric-ai --version || exit 1
+            interval: 1m30s
+            timeout: 10s
+            retries: 3
+            start_period: 40s
+            start_interval: 5s
+        cap_drop:
+            - ALL
     fabric-mcp:
         container_name: fabric-mcp
+        restart: unless-stopped
+        cpus: '0.2'
+        mem_limit: 256m
+        read_only: true
         ports:
             - 127.0.0.1:8000:8000
         volumes:
@@ -26,14 +32,7 @@ services:
         environment:
             - FABRIC_BASE_URL=http://fabric:8080
         image: honeylavender7435/fabric-mcp:v1
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.2'
-                    memory: 256M
-                reservations:
-                    cpus: '0.1'
-                    memory: 128M
-            restart_policy:
-                condition: unless-stopped
+        depends_on: fabric
         command: --transport http --host 0.0.0.0 --port 8000
+        cap_drop:
+            - ALL
