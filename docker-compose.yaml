@@ -32,7 +32,8 @@ services:
         environment:
             - FABRIC_BASE_URL=http://fabric:8080
         image: honeylavender7435/fabric-mcp:v1
-        depends_on: fabric
+        depends_on:
+            - fabric
         command: --transport http --host 0.0.0.0 --port 8000
         cap_drop:
             - ALL
