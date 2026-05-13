@@ -7,18 +7,20 @@ services:
         mem_limit: 128m
         read_only: true
         volumes:
-            - ${HOME}/.fabric-config:/home/appuser/.config/fabric
+            - ${HOME}/.fabric-config:/home/appuser/.config/fabric:ro
         image: kayvan/fabric@sha256:ec84f10869299b927543650273976c5f4f7154fc8a06958348c333bd437f2cae
         command: --serve --address 0.0.0.0:8080
         healthcheck:
-            test: /usr/local/bin/fabric --version || exit 1
-            interval: 1m30s
-            timeout: 10s
+            test: curl -s http://localhost:8080/ || exit 1
+            interval: 30s
+            timeout: 5s
             retries: 3
             start_period: 40s
             start_interval: 5s
         cap_drop:
             - ALL
+        security_opt:
+            - no-new-privileges: true
     fabric-mcp:
         container_name: fabric-mcp
         restart: on-failure:5
@@ -28,7 +30,7 @@ services:
         ports:
             - 127.0.0.1:8000:8000
         volumes:
-            - ${HOME}/.fabric-config:/home/appuser/.config/fabric
+            - ${HOME}/.fabric-config:/home/appuser/.config/fabric:ro
         environment:
             - FABRIC_BASE_URL=http://fabric:8080
         image: honeylavender7435/fabric-mcp@sha256:e129d0e572ddc12d54ee354485e7cd5e63f0c799bb6f20ecab82ffe4ede9a72a
@@ -37,3 +39,5 @@ services:
         command: --transport http --host 0.0.0.0 --port 8000
         cap_drop:
             - ALL
+        security_opt:
+            - no-new-privileges: true
