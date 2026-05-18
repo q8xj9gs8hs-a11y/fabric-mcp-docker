@@ -7,20 +7,15 @@ services:
         mem_limit: 128m
         read_only: true
         volumes:
-            - ${HOME}/.fabric-config:/home/appuser/.config/fabric:ro
+          - ${HOME}/.fabric-config:/home/appuser/.config/fabric:ro
         image: kayvan/fabric@sha256:ec84f10869299b927543650273976c5f4f7154fc8a06958348c333bd437f2cae
         command: --serve --address 0.0.0.0:8080
         healthcheck:
-            test: curl -s http://localhost:8080/ || exit 1
-            interval: 30s
-            timeout: 5s
-            retries: 3
-            start_period: 40s
-            start_interval: 5s
+            test: wget -O - http://localhost:8080/strategies || exit 1
         cap_drop:
             - ALL
         security_opt:
-            - no-new-privileges: true
+            - no-new-privileges
     fabric-mcp:
         container_name: fabric-mcp
         restart: on-failure:5
@@ -40,4 +35,4 @@ services:
         cap_drop:
             - ALL
         security_opt:
-            - no-new-privileges: true
+            - no-new-privileges
